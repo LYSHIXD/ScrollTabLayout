@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.lyshixd.tablayout.SlidingTabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sl_indicator_start_color="#ff0000"
+        app:sl_indicator_center_color="#00ffff"
+        app:sl_indicator_end_color="#0000ff"
+        app:sl_text_bold="SELECT"
+        app:sl_text_select_size="30"
+        app:sl_text_unselect_size="12"
+        app:sl_indicator_width="50dp"
+        app:sl_indicator_height="3dp"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

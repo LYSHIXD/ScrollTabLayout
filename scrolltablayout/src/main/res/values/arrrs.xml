@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SlidingTabLayout">
+
+        <attr name="sl_indicator_color" format="color"/>
+        <attr name="sl_indicator_start_color" format="color"/>
+        <attr name="sl_indicator_center_color" format="color"/>
+        <attr name="sl_indicator_end_color" format="color"/>
+        <attr name="sl_indicator_width" format="dimension"/>
+        <attr name="sl_indicator_height" format="dimension"/>
+        <attr name="sl_indicator_radius" format="dimension"/>
+        <attr name="sl_indicator_margin_left" format="dimension" />
+        <attr name="sl_indicator_margin_top" format="dimension"/>
+        <attr name="sl_indicator_margin_right" format="dimension"/>
+        <attr name="sl_indicator_margin_bottom" format="dimension"/>
+        <attr name="sl_indicator_width_equal_tisle" format="boolean"/>
+        <attr name="sl_indicator_gravity" format="enum">
+            <enum name="TOP" value="0"/>
+            <enum name="BOTTOM" value="1"/>
+        </attr>
+
+        <attr name="sl_text_select_size" format="integer"/>
+        <attr name="sl_text_unselect_size" format="integer"/>
+        <attr name="sl_text_select_color" format="color"/>
+        <attr name="sl_text_unselect_color" format="color"/>
+
+        <attr name="sl_text_size_type" format="enum">
+            <enum name="PX" value="0"/>
+            <enum name="DIP" value="1"/>
+            <enum name="SP" value="2"/>
+            <enum name="PT" value="3"/>
+        </attr>
+        <attr name="sl_text_bold" format="enum">
+            <enum name="SELECT" value="0"/>
+            <enum name="BOTH" value="1"/>
+            <enum name="NONE" value="2"/>
+        </attr>
+
+        <!-- tab -->
+        <attr name="sl_tab_width" format="dimension"/>
+        <attr name="sl_tab_padding" format="dimension"/>
+        <attr name="sl_tab_width_equal" format="boolean"/>
+
+
+    </declare-styleable>
+
+
+
+
+</resources>
