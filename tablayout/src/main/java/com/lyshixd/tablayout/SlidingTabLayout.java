@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *@Author: liyang
@@ -152,7 +153,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 		mTextSelectColor = ta.getColor(R.styleable.SlidingTabLayout_sl_text_select_color, Color.parseColor("#000000"));
 		mTextUnSelectColor = ta.getColor(R.styleable.SlidingTabLayout_sl_text_unselect_color, Color.parseColor("#888888"));
 
-		mIndicatorWidth = ta.getDimension(R.styleable.SlidingTabLayout_sl_indicator_width, 0);
+		mIndicatorWidth = ta.getDimension(R.styleable.SlidingTabLayout_sl_indicator_width, -1);
 		mIndicatorHeight = ta.getDimension(R.styleable.SlidingTabLayout_sl_indicator_height, 0);
 		mIndicatorCornerRadius = ta.getDimension(R.styleable.SlidingTabLayout_sl_indicator_radius, 0);
 		mIndicatorMarginLeft = ta.getDimension(R.styleable.SlidingTabLayout_sl_indicator_margin_left, 0);
@@ -275,7 +276,6 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		Log.d("mLog", "onPageScrolled********: " + position);
 //		Log.d("mLog", "positionOffsetPixels********: " + positionOffsetPixels);
 //		Log.d("mLog", "positionOffsetPixels: " + positionOffsetPixels + "-----" + i++);
 		this.mCurrentTab = position;
@@ -291,7 +291,6 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 	public void onPageSelected(int position) {
 		updateTabSelection(position);
 		mIsScrollSelected = true;
-		Log.d("mLog", "onPageSelected----------------------------: " + position);
 	}
 
 	@Override
@@ -388,16 +387,40 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 		TextView currentText = mTabsContainer.getChildAt(mViewPager.getCurrentItem()).findViewById(R.id.tv_tab_title);
 		TextView nextText = mTabsContainer.getChildAt(nextPosition).findViewById(R.id.tv_tab_title);
 
-		Log.d("mLog", "currentText: " + currentText.getText().toString() + "   nextText: " + nextText.getText().toString());
+		if (mTextUnSelectSize != mTextSelectSize) {
+			//文字大小渐变
+			float disSize = Math.abs(mTextUnSelectSize - mTextSelectSize) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset));
+			currentText.setTextSize(mTextSizeType, mTextSelectSize - disSize);
+			nextText.setTextSize(mTextSizeType, mTextUnSelectSize + disSize);
+		}
 
-		float dis = Math.abs(mTextUnSelectSize - mTextSelectSize) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset));
+		//文字颜色渐变
+		int[] currentColor = new int[]{Color.alpha(mTextSelectColor), Color.red(mTextSelectColor), Color.green(mTextSelectColor), Color.blue(mTextSelectColor)};
+		int[] nextColor = new int[]{Color.alpha(mTextUnSelectColor), Color.red(mTextUnSelectColor), Color.green(mTextUnSelectColor), Color.blue(mTextUnSelectColor)};
 
-//		Log.d("mLog", "nextSize: " + mTextUnSelectSize + dis);
-		Log.d("mLog", "mCurrentPositionOffset: " + mCurrentPositionOffset);
+		int[] disToNextColor = new int[]{
+				(int) ((nextColor[0] - currentColor[0]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((nextColor[1] - currentColor[1]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((nextColor[2] - currentColor[2]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((nextColor[3] - currentColor[3]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+		};
+		int[] disToCurrentColor = new int[]{
+				(int) ((currentColor[0] - nextColor[0]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((currentColor[1] - nextColor[1]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((currentColor[2] - nextColor[2]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+				(int) ((currentColor[3] - nextColor[3]) * (isNext ? mCurrentPositionOffset : (1 - mCurrentPositionOffset))),
+		};
 
-		currentText.setTextSize(mTextSizeType, mTextSelectSize - dis);
-		nextText.setTextSize(mTextSizeType, mTextUnSelectSize + dis);
-
+		currentText.setTextColor(Color.argb(
+				currentColor[0] - disToCurrentColor[0],
+				currentColor[1] - disToCurrentColor[1],
+				currentColor[2] - disToCurrentColor[2],
+				currentColor[3] - disToCurrentColor[3]));
+		nextText.setTextColor(Color.argb(
+				nextColor[0] - disToNextColor[0],
+				nextColor[1] - disToNextColor[1],
+				nextColor[2] - disToNextColor[2],
+				nextColor[3] - disToNextColor[3]));
 	}
 
 	private int mLastScrollX;
@@ -439,7 +462,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 		for (int i = 0; i < mTabCount; ++i) {
 			View tabView = mTabsContainer.getChildAt(i);
 			boolean isSelect = i == position;
-			TextView title = (TextView) tabView.findViewById(R.id.tv_tab_title);
+			TextView title = tabView.findViewById(R.id.tv_tab_title);
 			if (title != null) {
 				title.setTextColor(isSelect ? mTextSelectColor : mTextUnSelectColor);
 				title.setTextSize(mTextSizeType, isSelect ? mTextSelectSize : mTextUnSelectSize);
@@ -464,7 +487,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 		if (mIsIndicatorWidthEqualTitle) {
 			TextView title = currentTabView.findViewById(R.id.tv_tab_title);
 			//TODO 不一定是这个大小
-			mTextPaint.setTextSize(mTextSelectSize);
+			mTextPaint.setTextSize(mTextUnSelectSize);
 			float textWidth = mTextPaint.measureText(title.getText().toString());
 			margin = (right - left - textWidth) / 2;
 		}
@@ -481,7 +504,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 			if (mIsIndicatorWidthEqualTitle) {
 				TextView nextTitle = nextTabView.findViewById(R.id.tv_tab_title);
 				//TODO 不一定是这个大小
-				mTextPaint.setTextSize(mTextSelectSize);
+				mTextPaint.setTextSize(mTextUnSelectSize);
 				float nextTextWidth = mTextPaint.measureText(nextTitle.getText().toString());
 				margin = margin + mCurrentPositionOffset * (nextTextWidth - margin);
 			}
@@ -510,6 +533,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 		}
 	}
 
+	private boolean mIsJump = false;
 
 	@SuppressLint("DrawAllocation")
 	@Override
@@ -556,8 +580,6 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 			mIndicatorDrawable.draw(canvas);
 		}
 	}
-
-
 
 	protected int dp2px(float dp) {
 		final float scale = mContext.getResources().getDisplayMetrics().density;

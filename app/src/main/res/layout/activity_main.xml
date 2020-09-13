@@ -11,12 +11,14 @@
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:sl_indicator_start_color="#ff0000"
+        app:sl_text_select_color="#00BCD4"
+        app:sl_text_unselect_color="#FF9800"
+        app:sl_indicator_start_color="#236643"
         app:sl_indicator_center_color="#00ffff"
         app:sl_indicator_end_color="#0000ff"
         app:sl_text_bold="SELECT"
         app:sl_text_select_size="30"
-        app:sl_text_unselect_size="12"
+        app:sl_text_unselect_size="16"
         app:sl_indicator_width="50dp"
         app:sl_indicator_height="3dp"/>
 
