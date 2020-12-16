@@ -17,7 +17,7 @@
         app:sl_indicator_center_color="#00ffff"
         app:sl_indicator_end_color="#0000ff"
         app:sl_text_bold="SELECT"
-        app:sl_text_select_size="30"
+        app:sl_text_select_size="16"
         app:sl_text_unselect_size="16"
         app:sl_indicator_width="50dp"
         app:sl_indicator_height="3dp"/>

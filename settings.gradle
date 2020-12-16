@@ -1,3 +1,4 @@
+include ':NormalTabLayout'
 include ':tablayout'
 include ':app'
 rootProject.name = "ScrollTabLayout"
